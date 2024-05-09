@@ -1,13 +1,31 @@
-import { Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { DecodedPayload } from 'src/auth/decorators/decoded-payload.decorator';
 import { JwtDecodedPayload } from 'src/auth/models/jwt-decoded-payload';
 import { MessageResponse } from 'src/_shared/message.response';
+import { UpdateUserDto } from './models/update-user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  @UseGuards(JwtGuard)
+  @Put('me')
+  async update(
+    @DecodedPayload() { id }: JwtDecodedPayload,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<MessageResponse> {
+    await this.usersService.update(id, updateUserDto);
+    return { message: 'Your data succesfully updated' };
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('me')
+  async delete(@DecodedPayload() { id }: JwtDecodedPayload): Promise<MessageResponse> {
+    await this.usersService.delete(id);
+    return { message: 'Your account successfully deleted' };
+  }
 
   @UseGuards(JwtGuard)
   @Post(':followingId/follow')

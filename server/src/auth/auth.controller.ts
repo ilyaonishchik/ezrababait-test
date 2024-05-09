@@ -8,7 +8,7 @@ import { JwtGuard } from './guards/jwt.guard';
 import { DecodedPayload } from './decorators/decoded-payload.decorator';
 import { JwtDecodedPayload } from './models/jwt-decoded-payload';
 import { MessageResponse } from 'src/_shared/message.response';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/models/user.entity';
 
 @Controller('auth')
 export class AuthController {

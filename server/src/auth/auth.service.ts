@@ -2,7 +2,7 @@ import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/co
 import { SignUpDto } from './models/sign-up.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/models/user.entity';
 import * as bcrypt from 'bcrypt';
 import { v4 } from 'uuid';
 import { MailerService } from '@nestjs-modules/mailer';
