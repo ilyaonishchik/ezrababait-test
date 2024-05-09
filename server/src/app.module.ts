@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { DeedsModule } from './deeds/deeds.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     }),
     AuthModule.forRoot(),
     UsersModule,
+    DeedsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

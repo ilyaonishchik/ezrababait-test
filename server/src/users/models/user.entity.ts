@@ -1,9 +1,11 @@
+import { Deed } from 'src/deeds/models/deed.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -40,4 +42,7 @@ export class User {
 
   @ManyToMany(() => User, (user) => user.followings)
   followers: User[];
+
+  @OneToMany(() => Deed, (deed) => deed.user)
+  deeds: Deed[];
 }
