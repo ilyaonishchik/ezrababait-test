@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -25,4 +33,11 @@ export class User {
 
   @Column({ default: false })
   verified: boolean;
+
+  @ManyToMany(() => User, (user) => user.followers)
+  @JoinTable({ name: 'followings', joinColumn: { name: 'followerId' }, inverseJoinColumn: { name: 'followingId' } })
+  followings: User[];
+
+  @ManyToMany(() => User, (user) => user.followings)
+  followers: User[];
 }
