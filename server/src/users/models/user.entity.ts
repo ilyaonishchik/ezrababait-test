@@ -34,7 +34,7 @@ export class User {
   @Column({ default: false })
   verified: boolean;
 
-  @ManyToMany(() => User, (user) => user.followers, { cascade: true })
+  @ManyToMany(() => User, (user) => user.followers)
   @JoinTable({ name: 'followings', joinColumn: { name: 'followerId' }, inverseJoinColumn: { name: 'followingId' } })
   followings: User[];
 

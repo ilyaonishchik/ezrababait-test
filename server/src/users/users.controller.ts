@@ -39,7 +39,10 @@ export class UsersController {
 
   @UseGuards(JwtGuard)
   @Post(':followingId/unfollow')
-  async unfollow(@DecodedPayload() { id }: JwtDecodedPayload, @Param('followingId') followingId: string) {
+  async unfollow(
+    @DecodedPayload() { id }: JwtDecodedPayload,
+    @Param('followingId') followingId: string,
+  ): Promise<MessageResponse> {
     const following = await this.usersService.unfollow(id, +followingId);
     return { message: `You're no longer following the ${following.username}` };
   }
