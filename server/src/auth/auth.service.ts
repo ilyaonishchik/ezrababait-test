@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { SignUpDto } from './models/sign-up.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -7,13 +7,28 @@ import * as bcrypt from 'bcrypt';
 import { v4 } from 'uuid';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PASSWORD_HASH_SALT } from './constants';
+import { SignInDto } from './models/sign-in.dto';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './models/jwt-payload';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private mailerService: MailerService,
+    private jwtService: JwtService,
   ) {}
+
+  async signUp({ username, email, password }: SignUpDto): Promise<string> {
+    if (await this.isUsernameTaken(username)) throw new ConflictException('User with this username already exists');
+    if (await this.isEmailTaken(email)) throw new ConflictException('User with this email already exists');
+    const passwordHash = bcrypt.hashSync(password, PASSWORD_HASH_SALT);
+    const verificationLink = v4();
+    const user = await this.usersRepository.save({ username, email, passwordHash, verificationLink });
+    await this.sendVerificationMail(user.email, user.verificationLink);
+    const accessToken = this.generateAccessToken({ id: user.id, username: user.username });
+    return accessToken;
+  }
 
   async verify(verificationLink): Promise<boolean> {
     const user = await this.usersRepository.findOneBy({ verificationLink });
@@ -22,14 +37,13 @@ export class AuthService {
     return !!updateResult.affected;
   }
 
-  async signup({ username, email, password }: SignUpDto): Promise<User> {
-    if (await this.isUsernameTaken(username)) throw new ConflictException('User with this username already exists');
-    if (await this.isEmailTaken(email)) throw new ConflictException('User with this email already exists');
-    const passwordHash = bcrypt.hashSync(password, PASSWORD_HASH_SALT);
-    const verificationLink = v4();
-    const user = await this.usersRepository.save({ username, email, passwordHash, verificationLink });
-    await this.sendVerificationMail(user.email, user.verificationLink);
-    return user;
+  async signIn({ username, password }: SignInDto): Promise<string> {
+    const user = await this.usersRepository.findOneBy({ username });
+    if (!user) throw new UnauthorizedException('User not found');
+    const isPasswordMatch = bcrypt.compareSync(password, user.passwordHash);
+    if (!isPasswordMatch) throw new UnauthorizedException('Wrong password');
+    const accessToken = this.generateAccessToken({ id: user.id, username: user.username });
+    return accessToken;
   }
 
   private async isUsernameTaken(username: string): Promise<boolean> {
@@ -56,5 +70,10 @@ export class AuthService {
         </div>
       `,
     });
+  }
+
+  private generateAccessToken(payload: JwtPayload): string {
+    const accessToken = this.jwtService.sign(payload);
+    return accessToken;
   }
 }
