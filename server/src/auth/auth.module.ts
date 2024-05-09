@@ -4,10 +4,11 @@ import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStartegy } from './strategies/jwt.strategy';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStartegy],
 })
 export class AuthModule {
   static forRoot(): DynamicModule {

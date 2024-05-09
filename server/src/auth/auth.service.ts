@@ -10,6 +10,7 @@ import { PASSWORD_HASH_SALT } from './constants';
 import { SignInDto } from './models/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './models/jwt-payload';
+import { JwtDecodedPayload } from './models/jwt-decoded-payload';
 
 @Injectable()
 export class AuthService {
@@ -44,6 +45,10 @@ export class AuthService {
     if (!isPasswordMatch) throw new UnauthorizedException('Wrong password');
     const accessToken = this.generateAccessToken({ id: user.id, username: user.username });
     return accessToken;
+  }
+
+  async getMe({ id }: JwtDecodedPayload): Promise<User> {
+    return await this.usersRepository.findOneBy({ id });
   }
 
   private async isUsernameTaken(username: string): Promise<boolean> {
