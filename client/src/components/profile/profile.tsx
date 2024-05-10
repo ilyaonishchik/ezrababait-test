@@ -1,27 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import { useGetMeQuery } from '../../services/auth';
-import Loader from '../ui/loader';
-import SignOutButton from './sign-out-button';
-import { useEffect } from 'react';
+import ProfileHeader from './profile-header';
 
 export default function Profile() {
-  const { isLoading, error, data: me } = useGetMeQuery();
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (error) navigate('/sign-in');
-  }, [navigate, error]);
-
-  if (isLoading) return <Loader />;
-
   return (
-    <div>
-      <div>
-        <div>{me?.username}</div>
-        <div>{me?.email}</div>
-      </div>
-      <SignOutButton />
+    <div className='m-auto max-w-[700px] pl-2 pr-2 pt-2'>
+      <ProfileHeader />
     </div>
   );
 }

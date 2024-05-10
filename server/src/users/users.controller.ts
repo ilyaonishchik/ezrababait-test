@@ -1,29 +1,36 @@
-import { Body, Controller, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { DecodedPayload } from 'src/auth/decorators/decoded-payload.decorator';
 import { JwtDecodedPayload } from 'src/auth/models/jwt-decoded-payload';
 import { MessageResponse } from 'src/_shared/message.response';
 import { UpdateUserDto } from './models/update-user.dto';
+import { UserDetails } from './models/user-details';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @UseGuards(JwtGuard)
+  @Get('me/details')
+  async getMyDetails(@DecodedPayload() { id }: JwtDecodedPayload): Promise<UserDetails> {
+    return await this.usersService.getUserDetailsById(id);
+  }
+
+  @UseGuards(JwtGuard)
   @Put('me')
-  async update(
+  async updateMe(
     @DecodedPayload() { id }: JwtDecodedPayload,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<MessageResponse> {
-    await this.usersService.update(id, updateUserDto);
+    await this.usersService.updateUserById(id, updateUserDto);
     return { message: 'Your data succesfully updated' };
   }
 
   @UseGuards(JwtGuard)
   @Delete('me')
-  async delete(@DecodedPayload() { id }: JwtDecodedPayload): Promise<MessageResponse> {
-    await this.usersService.delete(id);
+  async deleteMe(@DecodedPayload() { id }: JwtDecodedPayload): Promise<MessageResponse> {
+    await this.usersService.deleteUserById(id);
     return { message: 'Your account successfully deleted' };
   }
 

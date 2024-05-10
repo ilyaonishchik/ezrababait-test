@@ -3,24 +3,41 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './models/user.entity';
 import { UpdateUserDto } from './models/update-user.dto';
+import { UserDetails } from './models/user-details';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {}
 
-  async update(id: number, { username }: UpdateUserDto): Promise<void> {
-    const me = await this.usersRepository.findOneBy({ id });
-    if (!me) throw new UnauthorizedException("You're not authenticated");
+  async getUserDetailsById(id: number): Promise<UserDetails> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: { followers: true, followings: true, deeds: true },
+    });
+    if (!user) throw new NotFoundException(`User with id ${id} not found`);
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      followersCount: user.followers.length,
+      followingsCount: user.followings.length,
+      deedsCount: user.deeds.length,
+    };
+  }
+
+  async updateUserById(id: number, { username }: UpdateUserDto): Promise<void> {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException(`User with id ${id} not found`);
     if (await this.isUsernameTaken(username)) throw new ConflictException('User with this username already exists');
     await this.usersRepository.update(id, { username });
   }
 
-  async delete(id: number): Promise<void> {
-    const me = await this.usersRepository.findOneBy({ id });
-    if (!me) throw new UnauthorizedException("You're not authenticated");
-    me.followers = [];
-    me.followings = [];
-    await this.usersRepository.save(me);
+  async deleteUserById(id: number): Promise<void> {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException(`User with id ${id} not found`);
+    user.followers = [];
+    user.followings = [];
+    await this.usersRepository.save(user);
     await this.usersRepository.delete(id);
   }
 
