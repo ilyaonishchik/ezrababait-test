@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useGetMeQuery } from '../../services/auth';
 
 export default function Home() {
-  const { data: me } = useGetMeQuery({});
+  const { data: me } = useGetMeQuery();
 
   return (
     <div>

@@ -8,12 +8,12 @@ import Loader from './components/ui/loader';
 import NotFound from './components/not-found/not-found';
 
 function App() {
-  const { isLoading, data: me } = useGetMeQuery({});
+  const { isLoading, data: me } = useGetMeQuery();
 
   if (isLoading) return <Loader />;
 
   return (
-    <div>
+    <main className='h-full bg-gray-100'>
       <Routes>
         <Route path='/' element={<Home />} />
         {me ? (
@@ -26,7 +26,7 @@ function App() {
         )}
         <Route path='*' element={<NotFound />} />
       </Routes>
-    </div>
+    </main>
   );
 }
 
