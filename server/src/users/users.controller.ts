@@ -6,15 +6,22 @@ import { JwtDecodedPayload } from 'src/auth/models/jwt-decoded-payload';
 import { MessageResponse } from 'src/_shared/message.response';
 import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
+import { PaginatedResponse } from 'src/_shared/paginated.response';
+import { Deed } from 'src/deeds/models/deed.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @Get(':userId/deeds')
+  async getUserDeeds(@Param('userId') userId: string): Promise<PaginatedResponse<Deed>> {
+    return await this.usersService.getUserDeeds(+userId);
+  }
+
   @UseGuards(JwtGuard)
   @Get('me/details')
   async getMyDetails(@DecodedPayload() { id }: JwtDecodedPayload): Promise<UserDetails> {
-    return await this.usersService.getUserDetailsById(id);
+    return await this.usersService.getUserDetails(id);
   }
 
   @UseGuards(JwtGuard)

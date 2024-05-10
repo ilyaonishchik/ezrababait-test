@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { UserDetails } from '../types/UserDetails';
+import { PaginatedResponse } from '../types/PaginatedResponse';
+import { Deed } from '../types/Deed';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -11,7 +13,10 @@ export const usersApi = createApi({
     getMyDetails: builder.query<UserDetails, void>({
       query: () => 'me/details',
     }),
+    getUserDeeds: builder.query<PaginatedResponse<Deed>, number>({
+      query: (userId: number) => `${userId}/deeds`,
+    }),
   }),
 });
 
-export const { useGetMyDetailsQuery } = usersApi;
+export const { useGetMyDetailsQuery, useGetUserDeedsQuery } = usersApi;

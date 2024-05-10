@@ -14,7 +14,7 @@ export class DeedsService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
-  async findByUserId(userId: number): Promise<PaginatedResponse<Deed>> {
+  async getAllByUserId(userId: number): Promise<PaginatedResponse<Deed>> {
     return await this.deedsRepository.findAndCount({ where: { user: { id: userId } } });
   }
 

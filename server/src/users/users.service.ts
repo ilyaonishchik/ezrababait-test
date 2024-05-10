@@ -4,17 +4,26 @@ import { Repository } from 'typeorm';
 import { User } from './models/user.entity';
 import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
+import { PaginatedResponse } from 'src/_shared/paginated.response';
+import { Deed } from 'src/deeds/models/deed.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(Deed) private readonly deedsRepository: Repository<Deed>,
+  ) {}
 
-  async getUserDetailsById(id: number): Promise<UserDetails> {
+  async getUserDeeds(userId: number): Promise<PaginatedResponse<Deed>> {
+    return await this.deedsRepository.findAndCount({ where: { user: { id: userId } } });
+  }
+
+  async getUserDetails(userId: number): Promise<UserDetails> {
     const user = await this.usersRepository.findOne({
-      where: { id },
+      where: { id: userId },
       relations: { followers: true, followings: true, deeds: true },
     });
-    if (!user) throw new NotFoundException(`User with id ${id} not found`);
+    if (!user) throw new NotFoundException(`User with id ${userId} not found`);
     return {
       id: user.id,
       username: user.username,

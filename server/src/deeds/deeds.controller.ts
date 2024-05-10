@@ -21,8 +21,8 @@ export class DeedsController {
 
   @UseGuards(JwtGuard)
   @Get()
-  async find(@DecodedPayload() { id: userId }: JwtDecodedPayload): Promise<PaginatedResponse<Deed>> {
-    return await this.deedsService.findByUserId(userId);
+  async getAllByUserId(@DecodedPayload() { id: userId }: JwtDecodedPayload): Promise<PaginatedResponse<Deed>> {
+    return await this.deedsService.getAllByUserId(userId);
   }
 
   @UseGuards(JwtGuard)
