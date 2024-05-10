@@ -32,12 +32,18 @@ export class AuthController {
   async signIn(@Body() signInDto: SignInDto, @Res({ passthrough: true }) response: Response): Promise<MessageResponse> {
     const accessToken = await this.authService.signIn(signInDto);
     response.cookie('accessToken', accessToken, { maxAge: ACCESS_TOKEN_COOKIE_MAX_AGE, httpOnly: true });
-    return { message: "You're successfully signed in" };
+    return { message: "You've successfully signed in" };
   }
 
   @UseGuards(JwtGuard)
   @Get('me')
   async me(@DecodedPayload() jwtDecodedPayload: JwtDecodedPayload): Promise<User> {
     return await this.authService.getMe(jwtDecodedPayload);
+  }
+
+  @Post('sign-out')
+  signOut(@Res({ passthrough: true }) response: Response): MessageResponse {
+    response.clearCookie('accessToken');
+    return { message: "You've successfully signed out" };
   }
 }
