@@ -1,5 +1,6 @@
 import { useGetMyDetailsQuery } from '../../services/users';
 import { Loader, Error, Stack, Paper, Group } from '../ui';
+import SignOutButton from './sign-out-button';
 
 export default function ProfileHeader() {
   const { isLoading, error, data: myDetails } = useGetMyDetailsQuery();
@@ -13,7 +14,7 @@ export default function ProfileHeader() {
       <Stack className='items-center gap-5'>
         <Stack className='items-center'>
           <div className='avatar placeholder'>
-            <div className='bg-neutral text-neutral-content w-24 rounded-full'>
+            <div className='w-24 rounded-full bg-neutral text-neutral-content'>
               <span className='text-3xl'>{username[0].toUpperCase()}</span>
             </div>
           </div>
@@ -34,6 +35,7 @@ export default function ProfileHeader() {
             <span className='text-gray-500'>Followers</span>
           </Stack>
         </Group>
+        <SignOutButton />
       </Stack>
     </Paper>
   );

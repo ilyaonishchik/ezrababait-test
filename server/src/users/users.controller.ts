@@ -8,10 +8,32 @@ import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
 import { PaginatedResponse } from 'src/_shared/paginated.response';
 import { Deed } from 'src/deeds/models/deed.entity';
+import { CreateDeedDto } from 'src/deeds/models/create-deed.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  @UseGuards(JwtGuard)
+  @Post(':userId/deeds')
+  async createDeed(
+    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
+    @Param('userId') userId: string,
+    @Body() createDeedDto: CreateDeedDto,
+  ): Promise<Deed> {
+    return await this.usersService.createDeed(decodedId, +userId, createDeedDto);
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete(':userId/deeds/:deedId')
+  async deleteDeed(
+    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
+    @Param('userId') userId: string,
+    @Param('deedId') deedId: string,
+  ): Promise<MessageResponse> {
+    await this.usersService.deleteDeed(decodedId, +userId, +deedId);
+    return { message: `Deed with id ${deedId} successfully deleted` };
+  }
 
   @Get(':userId/deeds')
   async getUserDeeds(
