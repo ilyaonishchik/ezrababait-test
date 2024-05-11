@@ -7,5 +7,5 @@ type GroupProps = {
 };
 
 export default function Group({ children, className }: GroupProps) {
-  return <div className={createClassName('flex flex-row', className)}>{children}</div>;
+  return <div className={createClassName('flex flex-row items-center gap-2', className)}>{children}</div>;
 }

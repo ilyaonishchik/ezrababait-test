@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { DeedsService } from './deeds.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { DecodedPayload } from 'src/auth/decorators/decoded-payload.decorator';
@@ -9,40 +9,50 @@ import { MessageResponse } from 'src/_shared/message.response';
 import { UpdateDeedDto } from './models/update-deed.dto';
 import { PaginatedResponse } from 'src/_shared/paginated.response';
 
-@Controller('deeds')
+@Controller('users/:userId/deeds')
 export class DeedsController {
   constructor(private deedsService: DeedsService) {}
 
   @UseGuards(JwtGuard)
   @Post()
-  async create(@DecodedPayload() { id }: JwtDecodedPayload, @Body() createDeedDto: CreateDeedDto): Promise<Deed> {
-    return await this.deedsService.create(id, createDeedDto);
+  async createDeed(
+    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
+    @Param('userId') userId: string,
+    @Body() createDeedDto: CreateDeedDto,
+  ): Promise<Deed> {
+    return await this.deedsService.createDeed(decodedId, +userId, createDeedDto);
   }
 
-  @UseGuards(JwtGuard)
   @Get()
-  async getAllByUserId(@DecodedPayload() { id: userId }: JwtDecodedPayload): Promise<PaginatedResponse<Deed>> {
-    return await this.deedsService.getAllByUserId(userId);
+  async getUserDeeds(
+    @Param('userId') userId: string,
+    @Query('page') page: string | undefined,
+    @Query('take') take: string | undefined,
+  ): Promise<PaginatedResponse<Deed>> {
+    return await this.deedsService.getUserDeeds(+userId, +page, +take);
   }
 
   @UseGuards(JwtGuard)
   @Put(':deedId')
-  async update(
-    @DecodedPayload() { id: userId }: JwtDecodedPayload,
+  async updateDeed(
+    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
+    @Param('userId') userId: string,
     @Param('deedId') deedId: string,
     @Body() updateDeedDto: UpdateDeedDto,
   ): Promise<MessageResponse> {
-    await this.deedsService.update(userId, +deedId, updateDeedDto);
-    return { message: 'Succesfully updated' };
+    console.log('here');
+    await this.deedsService.updateDeed(decodedId, +userId, +deedId, updateDeedDto);
+    return { message: `Deed with id ${deedId} successfully updated` };
   }
 
   @UseGuards(JwtGuard)
   @Delete(':deedId')
-  async delete(
-    @DecodedPayload() { id: userId }: JwtDecodedPayload,
+  async deleteDeed(
+    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
+    @Param('userId') userId: string,
     @Param('deedId') deedId: string,
   ): Promise<MessageResponse> {
-    await this.deedsService.delete(userId, +deedId);
-    return { message: 'Successfully deleted' };
+    await this.deedsService.deleteDeed(decodedId, +userId, +deedId);
+    return { message: `Deed with id ${deedId} successfully deleted` };
   }
 }

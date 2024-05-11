@@ -23,12 +23,12 @@ export default function Deeds() {
   return (
     <Paper>
       {deedsCount ? (
-        <Stack className='gap-8'>
+        <Stack className='gap-4'>
           {deeds?.map((deed, index) => (
-            <>
+            <div key={deed.id}>
               <DeedsItem deed={deed} />
               {index !== deeds.length - 1 && <div className='divider'></div>}
-            </>
+            </div>
           ))}
           {deedsCount / take > 1 && (
             <div className='join justify-center'>

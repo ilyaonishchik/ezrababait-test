@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Deed } from './models/deed.entity';
 import { Repository } from 'typeorm';
@@ -14,28 +14,35 @@ export class DeedsService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
-  async getAllByUserId(userId: number): Promise<PaginatedResponse<Deed>> {
-    return await this.deedsRepository.findAndCount({ where: { user: { id: userId } } });
-  }
-
-  async create(userId: number, createDeedDto: CreateDeedDto): Promise<Deed> {
+  async createDeed(decodedId: number, userId: number, createDeedDto: CreateDeedDto): Promise<Deed> {
+    if (decodedId !== userId) throw new ForbiddenException("You're not allowed");
     const user = await this.usersRepository.findOneBy({ id: userId });
-    if (!user) throw new UnauthorizedException("You're not authenticated");
-    const deed = await this.deedsRepository.save({ user, ...createDeedDto });
-    return deed;
+    if (!user) throw new NotFoundException(`User with id ${userId} not found`);
+    return await this.deedsRepository.save({ user, ...createDeedDto });
   }
 
-  async update(userId: number, deedId: number, updateDeedDto: UpdateDeedDto): Promise<void> {
-    const deed = await this.deedsRepository.findOne({ where: { id: deedId }, relations: { user: true } });
+  async getUserDeeds(userId: number, page: number, take: number): Promise<PaginatedResponse<Deed>> {
+    page = page || 1;
+    take = take || 5;
+    return await this.deedsRepository.findAndCount({
+      where: { user: { id: userId } },
+      skip: (page - 1) * take,
+      take,
+      order: { createdAt: { direction: 'DESC' } },
+    });
+  }
+
+  async updateDeed(decodedId: number, userId: number, deedId: number, updateDeedDto: UpdateDeedDto) {
+    if (decodedId !== userId) throw new ForbiddenException("You're not allowed");
+    const deed = await this.deedsRepository.findOne({ where: { id: deedId, user: { id: userId } } });
     if (!deed) throw new NotFoundException(`Deed with id ${deedId} not found`);
-    if (deed.user.id !== userId) throw new ForbiddenException("You're not allowed to do that");
     await this.deedsRepository.save({ ...deed, ...updateDeedDto });
   }
 
-  async delete(userId: number, deedId: number): Promise<void> {
-    const deed = await this.deedsRepository.findOne({ where: { id: deedId }, relations: { user: true } });
+  async deleteDeed(decodedId: number, userId: number, deedId: number) {
+    if (decodedId !== userId) throw new ForbiddenException("You're not allowed");
+    const deed = await this.deedsRepository.findOne({ where: { id: deedId, user: { id: userId } } });
     if (!deed) throw new NotFoundException(`Deed with id ${deedId} not found`);
-    if (deed.user.id !== userId) throw new ForbiddenException("You're not allowed to do that");
     await this.deedsRepository.delete({ id: deedId });
   }
 }

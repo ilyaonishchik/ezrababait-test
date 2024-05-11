@@ -1,18 +1,10 @@
-import {
-  ConflictException,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './models/user.entity';
 import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
-import { PaginatedResponse } from 'src/_shared/paginated.response';
 import { Deed } from 'src/deeds/models/deed.entity';
-import { CreateDeedDto } from 'src/deeds/models/create-deed.dto';
 
 @Injectable()
 export class UsersService {
@@ -20,30 +12,6 @@ export class UsersService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(Deed) private readonly deedsRepository: Repository<Deed>,
   ) {}
-
-  async createDeed(decodedId: number, userId: number, createDeedDto: CreateDeedDto): Promise<Deed> {
-    if (decodedId !== userId) throw new ForbiddenException("You're not allowed");
-    const user = await this.usersRepository.findOneBy({ id: userId });
-    if (!user) throw new NotFoundException(`User with id ${userId} not found`);
-    return await this.deedsRepository.save({ user, ...createDeedDto });
-  }
-
-  async deleteDeed(decodedId: number, userId: number, deedId: number) {
-    if (decodedId !== userId) throw new ForbiddenException("You're not allowed");
-    const deed = await this.deedsRepository.findOne({ where: { id: deedId, user: { id: userId } } });
-    if (!deed) throw new NotFoundException(`Deed with id ${deedId} not found`);
-    await this.deedsRepository.delete({ id: deedId });
-  }
-
-  async getUserDeeds(userId: number, page: number, take: number): Promise<PaginatedResponse<Deed>> {
-    page = page || 1;
-    take = take || 5;
-    return await this.deedsRepository.findAndCount({
-      where: { user: { id: userId } },
-      skip: (page - 1) * take,
-      take,
-    });
-  }
 
   async getUserDetails(userId: number): Promise<UserDetails> {
     const user = await this.usersRepository.findOne({

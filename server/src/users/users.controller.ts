@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { DecodedPayload } from 'src/auth/decorators/decoded-payload.decorator';
@@ -6,43 +6,10 @@ import { JwtDecodedPayload } from 'src/auth/models/jwt-decoded-payload';
 import { MessageResponse } from 'src/_shared/message.response';
 import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
-import { PaginatedResponse } from 'src/_shared/paginated.response';
-import { Deed } from 'src/deeds/models/deed.entity';
-import { CreateDeedDto } from 'src/deeds/models/create-deed.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
-
-  @UseGuards(JwtGuard)
-  @Post(':userId/deeds')
-  async createDeed(
-    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
-    @Param('userId') userId: string,
-    @Body() createDeedDto: CreateDeedDto,
-  ): Promise<Deed> {
-    return await this.usersService.createDeed(decodedId, +userId, createDeedDto);
-  }
-
-  @UseGuards(JwtGuard)
-  @Delete(':userId/deeds/:deedId')
-  async deleteDeed(
-    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
-    @Param('userId') userId: string,
-    @Param('deedId') deedId: string,
-  ): Promise<MessageResponse> {
-    await this.usersService.deleteDeed(decodedId, +userId, +deedId);
-    return { message: `Deed with id ${deedId} successfully deleted` };
-  }
-
-  @Get(':userId/deeds')
-  async getUserDeeds(
-    @Param('userId') userId: string,
-    @Query('page') page: string | undefined,
-    @Query('take') take: string | undefined,
-  ): Promise<PaginatedResponse<Deed>> {
-    return await this.usersService.getUserDeeds(+userId, +page, +take);
-  }
 
   @UseGuards(JwtGuard)
   @Get('me/details')

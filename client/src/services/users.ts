@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { UserDetails } from '../types/UserDetails';
 import { PaginatedResponse } from '../types/PaginatedResponse';
 import { Deed } from '../types/Deed';
+import { UpdateDeedDto } from '../types/UpdateDeedDto';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -27,6 +28,14 @@ export const usersApi = createApi({
       }),
       invalidatesTags: ['UserDetails', 'UserDeeds'],
     }),
+    updateDeed: builder.mutation<{ message: string }, { userId: number; deedId: number; body: UpdateDeedDto }>({
+      query: ({ userId, deedId, body }) => ({
+        url: `${userId}/deeds/${deedId}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['UserDeeds'],
+    }),
     deleteDeed: builder.mutation<Deed, { userId: number; deedId: number }>({
       query: ({ userId, deedId }) => ({
         url: `${userId}/deeds/${deedId}`,
@@ -37,4 +46,10 @@ export const usersApi = createApi({
   }),
 });
 
-export const { useGetMyDetailsQuery, useGetUserDeedsQuery, useCreateDeedMutation, useDeleteDeedMutation } = usersApi;
+export const {
+  useGetMyDetailsQuery,
+  useGetUserDeedsQuery,
+  useCreateDeedMutation,
+  useDeleteDeedMutation,
+  useUpdateDeedMutation,
+} = usersApi;
