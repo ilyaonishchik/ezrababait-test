@@ -14,8 +14,14 @@ export class UsersService {
     @InjectRepository(Deed) private readonly deedsRepository: Repository<Deed>,
   ) {}
 
-  async getUserDeeds(userId: number): Promise<PaginatedResponse<Deed>> {
-    return await this.deedsRepository.findAndCount({ where: { user: { id: userId } } });
+  async getUserDeeds(userId: number, page: number, take: number): Promise<PaginatedResponse<Deed>> {
+    page = page || 1;
+    take = take || 5;
+    return await this.deedsRepository.findAndCount({
+      where: { user: { id: userId } },
+      skip: (page - 1) * take,
+      take,
+    });
   }
 
   async getUserDetails(userId: number): Promise<UserDetails> {

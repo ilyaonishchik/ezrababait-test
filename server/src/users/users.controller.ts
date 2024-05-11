@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { DecodedPayload } from 'src/auth/decorators/decoded-payload.decorator';
@@ -14,8 +14,12 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get(':userId/deeds')
-  async getUserDeeds(@Param('userId') userId: string): Promise<PaginatedResponse<Deed>> {
-    return await this.usersService.getUserDeeds(+userId);
+  async getUserDeeds(
+    @Param('userId') userId: string,
+    @Query('page') page: string | undefined,
+    @Query('take') take: string | undefined,
+  ): Promise<PaginatedResponse<Deed>> {
+    return await this.usersService.getUserDeeds(+userId, +page, +take);
   }
 
   @UseGuards(JwtGuard)

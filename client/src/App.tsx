@@ -13,7 +13,7 @@ function App() {
   if (isLoading) return <Loader />;
 
   return (
-    <main className='h-full bg-gray-100'>
+    <main className='min-h-[100vh] bg-gray-200'>
       <Routes>
         <Route path='/' element={<Home />} />
         {me ? (

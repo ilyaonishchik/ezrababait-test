@@ -13,8 +13,8 @@ export const usersApi = createApi({
     getMyDetails: builder.query<UserDetails, void>({
       query: () => 'me/details',
     }),
-    getUserDeeds: builder.query<PaginatedResponse<Deed>, number>({
-      query: (userId: number) => `${userId}/deeds`,
+    getUserDeeds: builder.query<PaginatedResponse<Deed>, { userId: number; page: number; take: number }>({
+      query: ({ userId, page, take }) => `${userId}/deeds?page=${page}&take=${take}`,
     }),
   }),
 });
