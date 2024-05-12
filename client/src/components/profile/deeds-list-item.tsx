@@ -6,11 +6,11 @@ import { useGetMeQuery } from '../../services/auth';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 
-type DeedProps = {
+type DeedListItemProps = {
   deed: Deed;
 };
 
-export default function DeedsItem({ deed }: DeedProps) {
+export default function DeedsListItem({ deed }: DeedListItemProps) {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const handleToggleEditMode = () => setIsEditMode((prev) => !prev);
 

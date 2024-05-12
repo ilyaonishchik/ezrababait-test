@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { DecodedPayload } from 'src/auth/decorators/decoded-payload.decorator';
@@ -6,10 +6,22 @@ import { JwtDecodedPayload } from 'src/auth/models/jwt-decoded-payload';
 import { MessageResponse } from 'src/_shared/message.response';
 import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
+import { PaginatedResponse } from 'src/_shared/paginated.response';
+import { User } from './models/user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  @UseGuards(JwtGuard)
+  @Get()
+  async getUsers(
+    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
+    @Query('page') page: string | undefined,
+    @Query('take') take: string | undefined,
+  ): Promise<PaginatedResponse<User>> {
+    return await this.usersService.getUsers(decodedId, +page, +take);
+  }
 
   @UseGuards(JwtGuard)
   @Get('me/details')

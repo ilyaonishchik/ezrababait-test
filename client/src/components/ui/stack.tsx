@@ -1,11 +1,7 @@
-import { ReactNode } from 'react';
 import { createClassName } from '../../utils/createClassName';
+import { ChildrenProps } from '../../types/ChildrenProps';
+import { ClassNameProps } from '../../types/ClassNameProps';
 
-type StackProps = {
-  children: ReactNode;
-  className?: string;
-};
-
-export default function Stack({ children, className }: StackProps) {
-  return <div className={createClassName('flex flex-col', className)}>{children}</div>;
+export default function Stack({ children, className }: ChildrenProps & ClassNameProps) {
+  return <div className={createClassName('flex flex-col gap-2', className)}>{children}</div>;
 }

@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
+import { ChildrenProps } from '../../types/ChildrenProps';
 
 type AlertProps = {
-  children: ReactNode;
   variant: 'warning' | 'error';
 };
 
-export default function Alert({ children, variant }: AlertProps) {
+export default function Alert({ children, variant }: AlertProps & ChildrenProps) {
   switch (variant) {
     case 'warning':
       return <span className='text-xs text-yellow-500'>{children}</span>;

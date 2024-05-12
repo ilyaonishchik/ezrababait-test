@@ -6,6 +6,8 @@ import Profile from './components/profile/profile';
 import NotFound from './components/not-found/not-found';
 import UnauthorizedRoute from './components/unauthorized-route';
 import AuthorizedRoute from './components/authorized-route';
+import Users from './components/users/users';
+import User from './components/user/user';
 
 function App() {
   return (
@@ -17,6 +19,22 @@ function App() {
           element={
             <AuthorizedRoute>
               <Profile />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path='/users'
+          element={
+            <AuthorizedRoute>
+              <Users />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path='/users/:userId'
+          element={
+            <AuthorizedRoute>
+              <User />
             </AuthorizedRoute>
           }
         />

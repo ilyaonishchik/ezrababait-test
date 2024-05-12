@@ -3,6 +3,7 @@ import { UserDetails } from '../types/UserDetails';
 import { PaginatedResponse } from '../types/PaginatedResponse';
 import { Deed } from '../types/Deed';
 import { UpdateDeedDto } from '../types/UpdateDeedDto';
+import { User } from '../types/User';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -12,6 +13,9 @@ export const usersApi = createApi({
   }),
   tagTypes: ['UserDetails', 'UserDeeds'],
   endpoints: (builder) => ({
+    getUsers: builder.query<PaginatedResponse<User>, { page: number; take: number }>({
+      query: ({ page, take }) => `?page=${page}&take=${take}`,
+    }),
     getMyDetails: builder.query<UserDetails, void>({
       query: () => 'me/details',
       providesTags: ['UserDetails'],
@@ -47,6 +51,7 @@ export const usersApi = createApi({
 });
 
 export const {
+  useGetUsersQuery,
   useGetMyDetailsQuery,
   useGetUserDeedsQuery,
   useCreateDeedMutation,

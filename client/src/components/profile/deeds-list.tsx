@@ -1,12 +1,11 @@
 import { useGetMeQuery } from '../../services/auth';
 import { useGetUserDeedsQuery } from '../../services/users';
-import { Error, Loader, Paper, Stack } from '../ui';
-import { useState } from 'react';
-import DeedsItem from './deeds-item';
+import { Error, Loader, Pagination, Paper, Stack } from '../ui';
+import DeedsListItem from './deeds-list-item';
+import { usePagination } from '../../hooks/usePagination';
 
-export default function Deeds() {
-  const [page, setPage] = useState<number>(1);
-  const [take] = useState<number>(5);
+export default function DeedsList() {
+  const { page, setPage, take, setTake } = usePagination({ initialPage: 1, initialTake: 5 });
 
   const { isLoading: getMeIsLoading, error: getMeError, data: me } = useGetMeQuery();
   const {
@@ -26,24 +25,12 @@ export default function Deeds() {
         <Stack className='gap-4'>
           {deeds?.map((deed, index) => (
             <div key={deed.id}>
-              <DeedsItem deed={deed} />
+              <DeedsListItem deed={deed} />
               {index !== deeds.length - 1 && <div className='divider'></div>}
             </div>
           ))}
           {deedsCount / take > 1 && (
-            <div className='join justify-center'>
-              <button className='btn join-item' onClick={() => setPage((prev) => prev - 1)} disabled={page === 1}>
-                «
-              </button>
-              <button className='btn join-item'>{page}</button>
-              <button
-                className='btn join-item'
-                onClick={() => setPage((prev) => prev + 1)}
-                disabled={page === Math.ceil(deedsCount / take)}
-              >
-                »
-              </button>
-            </div>
+            <Pagination paginationProps={{ count: deedsCount, page, setPage, take, setTake }} />
           )}
         </Stack>
       ) : (

@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
 import { useGetMyDetailsQuery } from '../../services/users';
 import { Loader, Error, Stack, Paper, Group } from '../ui';
 import SignOutButton from './sign-out-button';
+import { IconSearch, IconSettings } from '@tabler/icons-react';
 
 export default function ProfileHeader() {
   const { isLoading, error, data: myDetails } = useGetMyDetailsQuery();
@@ -35,7 +37,17 @@ export default function ProfileHeader() {
             <span className='text-gray-500'>Followers</span>
           </Stack>
         </Group>
-        <SignOutButton />
+        <Group>
+          <Link to='/users'>
+            <button className='btn btn-square btn-primary btn-sm'>
+              <IconSearch className='h-4  w-4' />
+            </button>
+          </Link>
+          <button className='btn btn-square btn-sm'>
+            <IconSettings className='h-4 w-4' />
+          </button>
+          <SignOutButton />
+        </Group>
       </Stack>
     </Paper>
   );

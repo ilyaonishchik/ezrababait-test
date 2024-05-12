@@ -14,9 +14,8 @@ export default function SignOutButton() {
   };
 
   return (
-    <button className='btn btn-sm' onClick={handleSignOut}>
+    <button className='btn btn-square btn-sm' onClick={handleSignOut}>
       <IconSquareArrowLeft className='h-4 w-4' />
-      <span>Sign out</span>
     </button>
   );
 }

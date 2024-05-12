@@ -1,10 +1,11 @@
 import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { User } from './models/user.entity';
 import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
 import { Deed } from 'src/deeds/models/deed.entity';
+import { PaginatedResponse } from 'src/_shared/paginated.response';
 
 @Injectable()
 export class UsersService {
@@ -12,6 +13,12 @@ export class UsersService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(Deed) private readonly deedsRepository: Repository<Deed>,
   ) {}
+
+  async getUsers(decodedId: number, page: number, take: number): Promise<PaginatedResponse<User>> {
+    page = page || 1;
+    take = take || 10;
+    return await this.usersRepository.findAndCount({ where: { id: Not(decodedId) }, skip: (page - 1) * take, take });
+  }
 
   async getUserDetails(userId: number): Promise<UserDetails> {
     const user = await this.usersRepository.findOne({
