@@ -19,14 +19,15 @@ export class UsersController {
     @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
     @Query('page') page: string | undefined,
     @Query('take') take: string | undefined,
+    @Query('followerId') followerId: string | undefined,
+    @Query('followingId') followingId: string | undefined,
   ): Promise<PaginatedResponse<User>> {
-    return await this.usersService.getUsers(decodedId, +page, +take);
+    return await this.usersService.getUsers(decodedId, +page, +take, +followerId, +followingId);
   }
 
-  @UseGuards(JwtGuard)
-  @Get('me/details')
-  async getMyDetails(@DecodedPayload() { id }: JwtDecodedPayload): Promise<UserDetails> {
-    return await this.usersService.getUserDetails(id);
+  @Get(':userId/details')
+  async getUserDetails(@Param('userId') userId: string): Promise<UserDetails> {
+    return await this.usersService.getUserDetails(+userId);
   }
 
   @UseGuards(JwtGuard)

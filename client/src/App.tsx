@@ -8,12 +8,13 @@ import UnauthorizedRoute from './components/unauthorized-route';
 import AuthorizedRoute from './components/authorized-route';
 import Users from './components/users/users';
 import User from './components/user/user';
+import MainLayout from './layouts/main-layout';
 
 function App() {
   return (
-    <main className='min-h-[100vh] bg-gray-200'>
-      <Routes>
-        <Route path='/' element={<Home />} />
+    <Routes>
+      <Route path='/' element={<Home />} />
+      <Route element={<MainLayout />}>
         <Route
           path='/profile'
           element={
@@ -38,25 +39,25 @@ function App() {
             </AuthorizedRoute>
           }
         />
-        <Route
-          path='/sign-in'
-          element={
-            <UnauthorizedRoute>
-              <SignIn />
-            </UnauthorizedRoute>
-          }
-        />
-        <Route
-          path='/sign-up'
-          element={
-            <UnauthorizedRoute>
-              <SignUp />
-            </UnauthorizedRoute>
-          }
-        />
-        <Route path='*' element={<NotFound />} />
-      </Routes>
-    </main>
+      </Route>
+      <Route
+        path='/sign-in'
+        element={
+          <UnauthorizedRoute>
+            <SignIn />
+          </UnauthorizedRoute>
+        }
+      />
+      <Route
+        path='/sign-up'
+        element={
+          <UnauthorizedRoute>
+            <SignUp />
+          </UnauthorizedRoute>
+        }
+      />
+      <Route path='*' element={<NotFound />} />
+    </Routes>
   );
 }
 

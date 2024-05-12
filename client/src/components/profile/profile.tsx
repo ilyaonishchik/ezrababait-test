@@ -1,18 +1,18 @@
-import { Navigate } from 'react-router-dom';
 import { useGetMeQuery } from '../../services/auth';
 import CreateDeed from './create-deed';
-import ProfileHeader from './profile-header';
 import Container from '../ui/container';
 import DeedsList from './deeds-list';
+import UserHeader from '../common/user-header';
+import { Loader } from '../ui';
 
 export default function Profile() {
-  const { isError } = useGetMeQuery();
+  const { isLoading, data: me } = useGetMeQuery();
 
-  if (isError) return <Navigate to='/sign-in' />;
+  if (isLoading) return <Loader />;
 
   return (
     <Container>
-      <ProfileHeader />
+      <UserHeader userId={me!.id} />
       <CreateDeed />
       <DeedsList />
     </Container>

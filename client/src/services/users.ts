@@ -13,11 +13,15 @@ export const usersApi = createApi({
   }),
   tagTypes: ['UserDetails', 'UserDeeds'],
   endpoints: (builder) => ({
-    getUsers: builder.query<PaginatedResponse<User>, { page: number; take: number }>({
-      query: ({ page, take }) => `?page=${page}&take=${take}`,
+    getUsers: builder.query<
+      PaginatedResponse<User>,
+      { page: number; take: number; followerId?: number; followingId?: number }
+    >({
+      query: ({ page, take, followerId, followingId }) =>
+        `?page=${page}&take=${take}&followerId=${followerId}&followingId=${followingId}`,
     }),
-    getMyDetails: builder.query<UserDetails, void>({
-      query: () => 'me/details',
+    getUserDetails: builder.query<UserDetails, { userId: number }>({
+      query: ({ userId }) => `${userId}/details`,
       providesTags: ['UserDetails'],
     }),
     getUserDeeds: builder.query<PaginatedResponse<Deed>, { userId: number; page: number; take: number }>({
@@ -38,7 +42,7 @@ export const usersApi = createApi({
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['UserDeeds'],
+      invalidatesTags: ['UserDeeds', 'UserDetails'],
     }),
     deleteDeed: builder.mutation<Deed, { userId: number; deedId: number }>({
       query: ({ userId, deedId }) => ({
@@ -52,7 +56,7 @@ export const usersApi = createApi({
 
 export const {
   useGetUsersQuery,
-  useGetMyDetailsQuery,
+  useGetUserDetailsQuery,
   useGetUserDeedsQuery,
   useCreateDeedMutation,
   useDeleteDeedMutation,

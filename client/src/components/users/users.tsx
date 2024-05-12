@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { usePagination } from '../../hooks/usePagination';
 import { useGetUsersQuery } from '../../services/users';
 import { Loader } from '../ui';
@@ -6,8 +7,12 @@ import Search from './search';
 import UsersList from './users-list';
 
 export default function Users() {
+  const queryParams = new URLSearchParams(useLocation().search);
+  const followerId = +queryParams.get('followerId');
+  const followingId = +queryParams.get('followingId');
+
   const { page, setPage, take, setTake } = usePagination({ initialPage: 1, initialTake: 5 });
-  const { isLoading, data } = useGetUsersQuery({ page, take });
+  const { isLoading, data } = useGetUsersQuery({ page, take, followerId, followingId });
 
   return (
     <Container>

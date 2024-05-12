@@ -14,10 +14,25 @@ export class UsersService {
     @InjectRepository(Deed) private readonly deedsRepository: Repository<Deed>,
   ) {}
 
-  async getUsers(decodedId: number, page: number, take: number): Promise<PaginatedResponse<User>> {
+  async getUsers(
+    decodedId: number,
+    page: number,
+    take: number,
+    followerId: number,
+    followingId: number,
+  ): Promise<PaginatedResponse<User>> {
     page = page || 1;
     take = take || 10;
-    return await this.usersRepository.findAndCount({ where: { id: Not(decodedId) }, skip: (page - 1) * take, take });
+    console.log(followerId, followingId);
+    return await this.usersRepository.findAndCount({
+      where: {
+        id: Not(decodedId),
+        followers: followerId ? { id: followerId } : null,
+        followings: followingId ? { id: followingId } : null,
+      },
+      skip: (page - 1) * take,
+      take,
+    });
   }
 
   async getUserDetails(userId: number): Promise<UserDetails> {
@@ -33,6 +48,7 @@ export class UsersService {
       followersCount: user.followers.length,
       followingsCount: user.followings.length,
       deedsCount: user.deeds.length,
+      points: user.deeds.filter((deed) => deed.completed).reduce((acc, deed) => (acc += deed.points), 0),
     };
   }
 
