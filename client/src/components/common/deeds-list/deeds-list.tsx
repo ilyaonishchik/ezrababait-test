@@ -12,12 +12,15 @@ type DeedsListProps = {
 
 export default function DeedsList({ userId }: DeedsListProps) {
   const { page, setPage, take, setTake } = usePagination({ initialPage: 1, initialTake: 5 });
+
   const {
     isLoading: isGetUserDeedsLoading,
     error: getUserDeedsError,
     data: getUserDeedsData,
   } = useGetUserDeedsQuery({ userId, page, take });
+
   const { isLoading: isGetMeLoading, error: getMeError, data: getMeData } = useGetMeQuery();
+
   const {
     isLoading: isGetUserFollowingStatusLoading,
     error: getUserFollowingStatusError,
@@ -27,10 +30,13 @@ export default function DeedsList({ userId }: DeedsListProps) {
   if (isGetUserDeedsLoading || isGetMeLoading || isGetUserFollowingStatusLoading) return <DeedsListSkeleton />;
   if (getUserDeedsError || getMeError || getUserFollowingStatusError)
     return <Error error={getUserDeedsError || getMeError || getUserFollowingStatusError} />;
+
   const [deeds, count] = getUserDeedsData!;
+
   const me = getMeData!;
-  console.log(getUserFollowingStatusData);
+
   const { isFollowing } = getUserFollowingStatusData!;
+
   const editable = userId === me.id;
 
   return (
