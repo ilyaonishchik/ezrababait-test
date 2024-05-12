@@ -21,8 +21,9 @@ export class UsersController {
     @Query('take') take: string | undefined,
     @Query('followerId') followerId: string | undefined,
     @Query('followingId') followingId: string | undefined,
+    @Query('query') query: string | undefined,
   ): Promise<PaginatedResponse<User>> {
-    return await this.usersService.getUsers(decodedId, +page, +take, +followerId, +followingId);
+    return await this.usersService.getUsers(decodedId, +page, +take, +followerId, +followingId, query);
   }
 
   @Get(':userId/details')

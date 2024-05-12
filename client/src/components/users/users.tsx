@@ -10,9 +10,10 @@ export default function Users() {
   const queryParams = new URLSearchParams(useLocation().search);
   const followerId = +queryParams.get('followerId');
   const followingId = +queryParams.get('followingId');
+  const query = queryParams.get('query');
 
   const { page, setPage, take, setTake } = usePagination({ initialPage: 1, initialTake: 5 });
-  const { isLoading, data } = useGetUsersQuery({ page, take, followerId, followingId });
+  const { isLoading, data } = useGetUsersQuery({ page, take, followerId, followingId, query: query || '' });
 
   return (
     <Container>

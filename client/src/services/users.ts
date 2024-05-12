@@ -15,10 +15,10 @@ export const usersApi = createApi({
   endpoints: (builder) => ({
     getUsers: builder.query<
       PaginatedResponse<User>,
-      { page: number; take: number; followerId?: number; followingId?: number }
+      { page: number; take: number; followerId?: number; followingId?: number; query?: string }
     >({
-      query: ({ page, take, followerId, followingId }) =>
-        `?page=${page}&take=${take}&followerId=${followerId}&followingId=${followingId}`,
+      query: ({ page, take, followerId, followingId, query }) =>
+        `?page=${page}&take=${take}&followerId=${followerId}&followingId=${followingId}&query=${query}`,
     }),
     getUserDetails: builder.query<UserDetails, { userId: number }>({
       query: ({ userId }) => `${userId}/details`,

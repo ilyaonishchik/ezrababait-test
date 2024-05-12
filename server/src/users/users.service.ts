@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { User } from './models/user.entity';
 import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
@@ -20,13 +20,14 @@ export class UsersService {
     take: number,
     followerId: number,
     followingId: number,
+    query: string,
   ): Promise<PaginatedResponse<User>> {
     page = page || 1;
     take = take || 10;
-    console.log(followerId, followingId);
     return await this.usersRepository.findAndCount({
       where: {
         id: Not(decodedId),
+        username: query ? ILike(`%${query}%`) : null,
         followers: followerId ? { id: followerId } : null,
         followings: followingId ? { id: followingId } : null,
       },
