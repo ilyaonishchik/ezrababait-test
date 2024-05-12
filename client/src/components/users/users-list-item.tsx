@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { User } from '../../types/User';
 import { Group, Stack } from '../ui';
+import FollowButton from '../common/follow-button';
 
 type UsersListItemProps = {
   user: User;
@@ -22,7 +23,7 @@ export default function UsersListItem({ user }: UsersListItemProps) {
           </Stack>
         </Group>
       </Link>
-      <button className='btn btn-primary btn-sm'>Follow</button>
+      <FollowButton userId={user.id} />
     </Group>
   );
 }

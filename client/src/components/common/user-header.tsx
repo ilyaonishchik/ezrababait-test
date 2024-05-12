@@ -2,12 +2,15 @@ import { Link } from 'react-router-dom';
 import { useGetUserDetailsQuery } from '../../services/users';
 import { Loader, Paper, Stack, Error } from '../ui';
 import Points from './points';
+import { ChildrenProps } from '../../types/ChildrenProps';
+import FollowButton from './follow-button';
 
 type UserHeaderProps = {
   userId: number;
+  withFollowButton?: boolean;
 };
 
-export default function UserHeader({ userId }: UserHeaderProps) {
+export default function UserHeader({ userId, withFollowButton }: UserHeaderProps) {
   const { isLoading, error, data: myDetails } = useGetUserDetailsQuery({ userId });
 
   if (isLoading) return <Loader />;
@@ -45,6 +48,7 @@ export default function UserHeader({ userId }: UserHeaderProps) {
             </Stack>
           </Link>
         </div>
+        {withFollowButton && <FollowButton userId={userId} />}
       </Stack>
     </Paper>
   );

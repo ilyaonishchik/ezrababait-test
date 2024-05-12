@@ -1,4 +1,4 @@
-import { IconCarambola, IconEdit, IconX } from '@tabler/icons-react';
+import { IconEdit, IconX } from '@tabler/icons-react';
 import { Deed } from '../../types/Deed';
 import { Group, Loader, Stack } from '../ui';
 import { useDeleteDeedMutation, useUpdateDeedMutation } from '../../services/users';

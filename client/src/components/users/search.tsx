@@ -13,7 +13,6 @@ export default function Search() {
 
   const handleSearch = () => {
     queryParams.set('query', search);
-    console.log(queryParams);
     navigate(`/users?${queryParams.toString()}`, { replace: true });
   };
 

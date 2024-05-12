@@ -6,6 +6,8 @@ import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
 import { Deed } from 'src/deeds/models/deed.entity';
 import { PaginatedResponse } from 'src/_shared/paginated.response';
+import { UserFollowingStatus } from './models/user-following-status';
+import { MessageResponse } from 'src/_shared/message.response';
 
 @Injectable()
 export class UsersService {
@@ -13,6 +15,39 @@ export class UsersService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(Deed) private readonly deedsRepository: Repository<Deed>,
   ) {}
+
+  async toggleFollowing(decodedId: number, userId: number): Promise<MessageResponse> {
+    if (decodedId === userId) throw new ConflictException("You can't follow/unfollow yourself");
+    const decodedUser = await this.usersRepository.findOne({
+      where: { id: decodedId },
+      relations: { followings: true },
+    });
+    if (!decodedUser) throw new UnauthorizedException(`You are not authenticated`);
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException(`User with id ${userId} not found`);
+    let message;
+    if (decodedUser.followings.some((following) => following.id === userId)) {
+      decodedUser.followings = decodedUser.followings.filter((following) => following.id !== userId);
+      message = `You're no longer following ${user.username}`;
+    } else {
+      decodedUser.followings.push(user);
+      message = `You're following ${user.username} now`;
+    }
+    await this.usersRepository.save(decodedUser);
+    return { message };
+  }
+
+  async getUserFollowingStatus(decodedId: number, userId: number): Promise<UserFollowingStatus> {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: { followers: true, followings: true },
+    });
+    if (!user) throw new NotFoundException(`User with id ${userId} not found`);
+    return {
+      isFollowing: !!user.followers.find((follower) => follower.id === decodedId),
+      isFollower: !!user.followings.find((following) => following.id === decodedId),
+    };
+  }
 
   async getUsers(
     decodedId: number,

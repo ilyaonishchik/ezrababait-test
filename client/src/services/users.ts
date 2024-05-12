@@ -4,6 +4,15 @@ import { PaginatedResponse } from '../types/PaginatedResponse';
 import { Deed } from '../types/Deed';
 import { UpdateDeedDto } from '../types/UpdateDeedDto';
 import { User } from '../types/User';
+import { UserFollowingStatus } from '../types/UserFollowingStatus';
+
+type GetUsersRequest = {
+  page: number;
+  take: number;
+  followerId?: number;
+  followingId?: number;
+  query?: string;
+};
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -11,14 +20,23 @@ export const usersApi = createApi({
     baseUrl: `${import.meta.env.VITE_SERVER_URL}/users/`,
     credentials: 'include',
   }),
-  tagTypes: ['UserDetails', 'UserDeeds'],
+  tagTypes: ['Users', 'UserDetails', 'UserDeeds', 'UserFollowingStatus'],
   endpoints: (builder) => ({
-    getUsers: builder.query<
-      PaginatedResponse<User>,
-      { page: number; take: number; followerId?: number; followingId?: number; query?: string }
-    >({
+    toggleFollowing: builder.mutation<{ message: string }, { userId: number }>({
+      query: ({ userId }) => ({
+        url: `${userId}/toggle-following`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['UserFollowingStatus', 'UserDetails', 'Users'],
+    }),
+    getUserFollowingStatus: builder.query<UserFollowingStatus, { userId: number }>({
+      query: ({ userId }) => `/${userId}/following-status`,
+      providesTags: ['UserFollowingStatus'],
+    }),
+    getUsers: builder.query<PaginatedResponse<User>, GetUsersRequest>({
       query: ({ page, take, followerId, followingId, query }) =>
         `?page=${page}&take=${take}&followerId=${followerId}&followingId=${followingId}&query=${query}`,
+      providesTags: ['Users'],
     }),
     getUserDetails: builder.query<UserDetails, { userId: number }>({
       query: ({ userId }) => `${userId}/details`,
@@ -61,4 +79,6 @@ export const {
   useCreateDeedMutation,
   useDeleteDeedMutation,
   useUpdateDeedMutation,
+  useGetUserFollowingStatusQuery,
+  useToggleFollowingMutation,
 } = usersApi;

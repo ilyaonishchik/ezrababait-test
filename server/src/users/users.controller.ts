@@ -8,10 +8,20 @@ import { UpdateUserDto } from './models/update-user.dto';
 import { UserDetails } from './models/user-details';
 import { PaginatedResponse } from 'src/_shared/paginated.response';
 import { User } from './models/user.entity';
+import { UserFollowingStatus } from './models/user-following-status';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  @UseGuards(JwtGuard)
+  @Get(':userId/following-status')
+  async getUserFollowingStatus(
+    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
+    @Param('userId') userId: string,
+  ): Promise<UserFollowingStatus> {
+    return this.usersService.getUserFollowingStatus(decodedId, +userId);
+  }
 
   @UseGuards(JwtGuard)
   @Get()
@@ -46,6 +56,15 @@ export class UsersController {
   async deleteMe(@DecodedPayload() { id }: JwtDecodedPayload): Promise<MessageResponse> {
     await this.usersService.deleteUserById(id);
     return { message: 'Your account successfully deleted' };
+  }
+
+  @UseGuards(JwtGuard)
+  @Post(':userId/toggle-following')
+  async toggleFollowing(
+    @DecodedPayload() { id: decodedId }: JwtDecodedPayload,
+    @Param('userId') userId: string,
+  ): Promise<MessageResponse> {
+    return await this.usersService.toggleFollowing(decodedId, +userId);
   }
 
   @UseGuards(JwtGuard)

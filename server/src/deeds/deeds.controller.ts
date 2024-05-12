@@ -40,7 +40,6 @@ export class DeedsController {
     @Param('deedId') deedId: string,
     @Body() updateDeedDto: UpdateDeedDto,
   ): Promise<MessageResponse> {
-    console.log('here');
     await this.deedsService.updateDeed(decodedId, +userId, +deedId, updateDeedDto);
     return { message: `Deed with id ${deedId} successfully updated` };
   }

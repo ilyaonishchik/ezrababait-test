@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { usePagination } from '../../hooks/usePagination';
 import { useGetUsersQuery } from '../../services/users';
-import { Loader } from '../ui';
+import { Loader, Paper } from '../ui';
 import Container from '../ui/container';
 import Search from './search';
 import UsersList from './users-list';
@@ -19,7 +19,11 @@ export default function Users() {
     <Container>
       <Search />
       {isLoading && <Loader />}
-      {data && <UsersList users={data[0]} paginationProps={{ count: data[1], page, setPage, take, setTake }} />}
+      {data && data[1] ? (
+        <UsersList users={data[0]} paginationProps={{ count: data[1], page, setPage, take, setTake }} />
+      ) : (
+        <Paper className='text-xl'>Nobody found</Paper>
+      )}
     </Container>
   );
 }
