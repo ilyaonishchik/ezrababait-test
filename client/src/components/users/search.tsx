@@ -7,7 +7,7 @@ export default function Search() {
   const queryParams = new URLSearchParams(useLocation().search);
   const query = queryParams.get('query');
 
-  const [search, setSearch] = useState(query);
+  const [search, setSearch] = useState(query || '');
 
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ export default function Search() {
   };
 
   return (
-    <Paper className='p-4'>
+    <Paper>
       <Group>
         <input
           className='input input-bordered w-full'

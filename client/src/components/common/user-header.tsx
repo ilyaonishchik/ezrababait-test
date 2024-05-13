@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useGetUserDetailsQuery } from '../../services/users';
-import { Loader, Paper, Stack, Error } from '../ui';
+import { Loader, Paper, Stack, Error, Avatar } from '../ui';
 import Points from './points';
-import { ChildrenProps } from '../../types/props/ChildrenProps';
 import FollowButton from './follow-button';
 
 type UserHeaderProps = {
@@ -21,11 +20,9 @@ export default function UserHeader({ userId, withFollowButton }: UserHeaderProps
     <Paper>
       <Stack className='items-center gap-5'>
         <Stack className='items-center'>
-          <div className='avatar placeholder'>
-            <div className='w-24 rounded-full bg-neutral text-neutral-content'>
-              <span className='text-3xl'>{username[0].toUpperCase()}</span>
-            </div>
-          </div>
+          <Avatar className='w-16 sm:w-24'>
+            <span className='text-3xl'>{username[0].toUpperCase()}</span>
+          </Avatar>
           <span className='font-bold'>{username}</span>
           <span className='text-xs'>{email}</span>
           <Points value={points} />
@@ -33,18 +30,18 @@ export default function UserHeader({ userId, withFollowButton }: UserHeaderProps
         <div className='grid grid-cols-3 gap-5'>
           <Stack className='items-center'>
             <span className='text-xl font-bold'>{deedsCount}</span>
-            <span className='text-gray-500'>Deeds</span>
+            <span className='sm:text-md text-sm text-gray-500'>Deeds</span>
           </Stack>
           <Link to={`/users?followingId=${userId}`}>
             <Stack className='items-center'>
               <span className='text-xl font-bold'>{followersCount}</span>
-              <span className='text-gray-500'>Followers</span>
+              <span className='sm:text-md text-sm text-gray-500'>Followers</span>
             </Stack>
           </Link>
           <Link to={`/users?followerId=${userId}`}>
             <Stack className='items-center'>
               <span className='text-xl font-bold'>{followingsCount}</span>
-              <span className='text-gray-500'>Followings</span>
+              <span className='sm:text-md text-sm text-gray-500'>Followings</span>
             </Stack>
           </Link>
         </div>

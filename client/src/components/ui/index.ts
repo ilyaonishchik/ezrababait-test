@@ -1,4 +1,5 @@
 import Alert from './alert';
+import Avatar from './avatar';
 import Container from './container';
 import Error from './error';
 import Group from './group';
@@ -9,4 +10,4 @@ import Pagination from './pagination';
 import Paper from './paper';
 import Stack from './stack';
 
-export { Alert, Error, Group, Loader, Paper, Stack, Container, Pagination, Modal, Input };
+export { Alert, Error, Group, Loader, Paper, Stack, Container, Pagination, Modal, Input, Avatar };

@@ -9,8 +9,8 @@ type UsersList = {
 
 export default function UsersList({ users, paginationProps }: UsersList & PaginationProps) {
   return (
-    <Paper>
-      <Stack className='gap-4'>
+    <Paper className='p-[1rem] sm:p-8'>
+      <Stack className='gap-6'>
         {users.map((user) => (
           <UsersListItem key={user.id} user={user} />
         ))}

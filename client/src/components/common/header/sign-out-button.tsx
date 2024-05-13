@@ -16,7 +16,7 @@ export default function SignOutButton() {
   return (
     <button className='btn btn-sm' onClick={handleSignOut}>
       <IconSquareArrowLeft className='h-4 w-4' />
-      Sign out
+      <span className='hidden sm:block'>Sign out</span>
     </button>
   );
 }
