@@ -1,0 +1,97 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { PaginatedResponse, UpdateDeedDto, MessageResponse, UpdateUserDto } from '../types/RTK';
+import { Deed, User, UserDetails, UserFollowingStatus } from '../types/entities';
+
+type GetUsersRequest = {
+  page: number;
+  take: number;
+  followerId?: number;
+  followingId?: number;
+  query?: string;
+};
+
+export const usersApi = createApi({
+  reducerPath: 'usersApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${import.meta.env.VITE_SERVER_URL}/users/`,
+    credentials: 'include',
+  }),
+  tagTypes: ['Users', 'UserDetails', 'UserDeeds', 'UserFollowingStatus'],
+  endpoints: (builder) => ({
+    updateMe: builder.mutation<MessageResponse, UpdateUserDto>({
+      query: (body) => ({
+        url: 'me',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Users', 'UserDetails'],
+    }),
+    deleteMe: builder.mutation<{ message: string }, void>({
+      query: () => ({
+        url: 'me',
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Users', 'UserDetails', 'UserDeeds', 'UserFollowingStatus'],
+    }),
+    toggleFollowing: builder.mutation<{ message: string }, { userId: number }>({
+      query: ({ userId }) => ({
+        url: `${userId}/toggle-following`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['UserFollowingStatus', 'UserDetails', 'Users'],
+    }),
+    getUserFollowingStatus: builder.query<UserFollowingStatus, { userId: number }>({
+      query: ({ userId }) => `/${userId}/following-status`,
+      providesTags: ['UserFollowingStatus'],
+    }),
+    getUsers: builder.query<PaginatedResponse<User>, GetUsersRequest>({
+      query: ({ page, take, followerId, followingId, query }) =>
+        `?page=${page}&take=${take}&followerId=${followerId}&followingId=${followingId}&query=${query}`,
+      providesTags: ['Users'],
+    }),
+    getUserDetails: builder.query<UserDetails, { userId: number }>({
+      query: ({ userId }) => `${userId}/details`,
+      providesTags: ['UserDetails'],
+    }),
+    getUserDeeds: builder.query<PaginatedResponse<Deed>, { userId: number; page: number; take: number }>({
+      query: ({ userId, page, take }) => `${userId}/deeds?page=${page}&take=${take}`,
+      providesTags: ['UserDeeds'],
+    }),
+    createDeed: builder.mutation<Deed, { userId: number; title: string; description: string; points: number }>({
+      query: (body) => ({
+        url: `${body.userId}/deeds`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['UserDetails', 'UserDeeds'],
+    }),
+    updateDeed: builder.mutation<{ message: string }, { userId: number; deedId: number; body: UpdateDeedDto }>({
+      query: ({ userId, deedId, body }) => ({
+        url: `${userId}/deeds/${deedId}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['UserDeeds', 'UserDetails'],
+    }),
+    deleteDeed: builder.mutation<Deed, { userId: number; deedId: number }>({
+      query: ({ userId, deedId }) => ({
+        url: `${userId}/deeds/${deedId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['UserDetails', 'UserDeeds'],
+    }),
+  }),
+});
+
+export const {
+  useGetUsersQuery,
+  useGetUserDetailsQuery,
+  useGetUserDeedsQuery,
+  useCreateDeedMutation,
+  useDeleteDeedMutation,
+  useUpdateDeedMutation,
+  useGetUserFollowingStatusQuery,
+  useToggleFollowingMutation,
+  useDeleteMeMutation,
+  useUpdateMeMutation,
+} = usersApi;
