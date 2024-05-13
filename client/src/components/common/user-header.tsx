@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useGetUserDetailsQuery } from '../../services/users';
+import { useGetUserDetailsQuery } from '../../services/api';
 import { Loader, Paper, Stack, Error, Avatar } from '../ui';
 import Points from './points';
 import FollowButton from './follow-button';

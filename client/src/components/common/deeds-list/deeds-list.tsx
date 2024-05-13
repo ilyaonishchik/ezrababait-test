@@ -1,7 +1,7 @@
 import { IconExclamationCircle } from '@tabler/icons-react';
 import { usePagination } from '../../../hooks/usePagination';
-import { useGetMeQuery } from '../../../services/auth';
-import { useGetUserDeedsQuery, useGetUserFollowingStatusQuery } from '../../../services/users';
+import { useGetMeQuery } from '../../../services/api';
+import { useGetUserDeedsQuery, useGetUserFollowingStatusQuery } from '../../../services/api';
 import { Error, Group, Pagination, Paper, Stack } from '../../ui';
 import DeedsListItem from './deeds-list-item';
 import DeedsListSkeleton from './deeds-list-skeleton';

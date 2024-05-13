@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useUpdateMeMutation } from '../../services/users';
+import { useUpdateMeMutation } from '../../services/api';
 import { Input, Loader, Paper, Stack } from '../ui';
 import * as Yup from 'yup';
 

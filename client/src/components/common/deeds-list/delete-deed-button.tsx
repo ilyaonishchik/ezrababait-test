@@ -1,5 +1,5 @@
 import { IconTrash } from '@tabler/icons-react';
-import { useDeleteDeedMutation } from '../../../services/users';
+import { useDeleteDeedMutation } from '../../../services/api';
 import { Loader } from '../../ui';
 
 type DeleteDeedButtonProps = {

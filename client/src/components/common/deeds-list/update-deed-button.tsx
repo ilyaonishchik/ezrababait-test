@@ -1,7 +1,7 @@
 import { IconEdit } from '@tabler/icons-react';
 import { useDisclosure } from '../../../hooks/useDisclosure';
 import { Input, Loader, Modal, Stack } from '../../ui';
-import { useUpdateDeedMutation } from '../../../services/users';
+import { useUpdateDeedMutation } from '../../../services/api';
 import { Deed } from '../../../types/entities';
 import { useFormik } from 'formik';
 

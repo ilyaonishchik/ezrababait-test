@@ -1,9 +1,9 @@
 import { IconPlus } from '@tabler/icons-react';
 import { Input, Paper, Stack } from '../ui';
 import { useFormik } from 'formik';
-import { useCreateDeedMutation } from '../../services/users';
+import { useCreateDeedMutation } from '../../services/api';
 import * as Yup from 'yup';
-import { useGetMeQuery } from '../../services/auth';
+import { useGetMeQuery } from '../../services/api';
 
 export default function CreateDeed() {
   const { data: me } = useGetMeQuery();

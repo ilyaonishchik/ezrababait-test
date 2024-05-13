@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useSignOutMutation } from '../../../services/auth';
+import { useSignOutMutation } from '../../../services/api';
 import { IconSquareArrowLeft } from '@tabler/icons-react';
 
 export default function SignOutButton() {

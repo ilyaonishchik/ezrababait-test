@@ -1,7 +1,7 @@
 import { Deed } from '../../../types/entities/Deed';
 import { Group, Stack } from '../../ui';
 import Points from '../points';
-import { useUpdateDeedMutation } from '../../../services/users';
+import { useUpdateDeedMutation } from '../../../services/api';
 import UpdateDeedButton from './update-deed-button';
 import DeleteDeedButton from './delete-deed-button';
 
