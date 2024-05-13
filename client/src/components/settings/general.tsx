@@ -1,5 +1,6 @@
+import { IconCircleCheckFilled, IconCircleXFilled } from '@tabler/icons-react';
 import { User } from '../../types/entities';
-import { Paper, Stack } from '../ui';
+import { Paper } from '../ui';
 
 type GeneralProps = {
   me: User;
@@ -8,10 +9,28 @@ type GeneralProps = {
 export default function General({ me }: GeneralProps) {
   return (
     <Paper title='General info'>
-      <Stack>
-        <div>{me.username}</div>
-        <div>{me.email}</div>
-      </Stack>
+      <table className='table'>
+        <tbody>
+          <tr>
+            <th>Username</th>
+            <td>{me.username}</td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td>{me.email}</td>
+          </tr>
+          <tr>
+            <th>Verified</th>
+            <td>
+              {me.verified ? (
+                <IconCircleCheckFilled className='text-green-500' />
+              ) : (
+                <IconCircleXFilled className='text-red-500' />
+              )}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </Paper>
   );
 }

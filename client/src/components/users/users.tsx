@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { usePagination } from '../../hooks/usePagination';
-import { useGetUsersQuery } from '../../services/users';
+import { useGetUsersQuery } from '../../services/api';
 import { Loader, Paper } from '../ui';
 import Container from '../ui/container';
 import Search from './search';

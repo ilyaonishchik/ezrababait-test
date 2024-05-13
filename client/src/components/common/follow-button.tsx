@@ -1,4 +1,4 @@
-import { useGetUserFollowingStatusQuery, useToggleFollowingMutation } from '../../services/users';
+import { useGetUserFollowingStatusQuery, useToggleFollowingMutation } from '../../services/api';
 import { Error, Loader } from '../ui';
 
 type FollowButtonProps = {

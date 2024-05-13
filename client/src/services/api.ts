@@ -10,56 +10,80 @@ type GetUsersRequest = {
   query?: string;
 };
 
-export const usersApi = createApi({
+export const api = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_SERVER_URL}/users/`,
+    baseUrl: `${import.meta.env.VITE_SERVER_URL}/`,
     credentials: 'include',
   }),
-  tagTypes: ['Users', 'UserDetails', 'UserDeeds', 'UserFollowingStatus'],
+  tagTypes: ['Me', 'Users', 'UserDetails', 'UserDeeds', 'UserFollowingStatus'],
   endpoints: (builder) => ({
+    getMe: builder.query<User, void>({
+      query: () => 'auth/me',
+      providesTags: ['Me'],
+    }),
+    signIn: builder.mutation<{ message: string }, { username: string; password: string }>({
+      query: (body) => ({
+        url: 'auth/sign-in',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Me'],
+    }),
+    signUp: builder.mutation<{ message: string }, { email: string; username: string; password: string }>({
+      query: (body) => ({
+        url: 'auth/sign-up',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Me'],
+    }),
+    signOut: builder.mutation<{ message: string }, void>({
+      query: () => ({ url: 'auth/sign-out', method: 'POST' }),
+      invalidatesTags: ['Me'],
+    }),
     updateMe: builder.mutation<MessageResponse, UpdateUserDto>({
       query: (body) => ({
-        url: 'me',
+        url: 'users/me',
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Users', 'UserDetails'],
+      invalidatesTags: ['Me', 'Users', 'UserDetails'],
     }),
     deleteMe: builder.mutation<{ message: string }, void>({
       query: () => ({
-        url: 'me',
+        url: 'users/me',
         method: 'DELETE',
       }),
       invalidatesTags: ['Users', 'UserDetails', 'UserDeeds', 'UserFollowingStatus'],
     }),
     toggleFollowing: builder.mutation<{ message: string }, { userId: number }>({
       query: ({ userId }) => ({
-        url: `${userId}/toggle-following`,
+        url: `users/${userId}/toggle-following`,
         method: 'POST',
       }),
       invalidatesTags: ['UserFollowingStatus', 'UserDetails', 'Users'],
     }),
     getUserFollowingStatus: builder.query<UserFollowingStatus, { userId: number }>({
-      query: ({ userId }) => `/${userId}/following-status`,
+      query: ({ userId }) => `users/${userId}/following-status`,
       providesTags: ['UserFollowingStatus'],
     }),
     getUsers: builder.query<PaginatedResponse<User>, GetUsersRequest>({
       query: ({ page, take, followerId, followingId, query }) =>
-        `?page=${page}&take=${take}&followerId=${followerId}&followingId=${followingId}&query=${query}`,
+        `users/?page=${page}&take=${take}&followerId=${followerId}&followingId=${followingId}&query=${query}`,
       providesTags: ['Users'],
     }),
     getUserDetails: builder.query<UserDetails, { userId: number }>({
-      query: ({ userId }) => `${userId}/details`,
+      query: ({ userId }) => `users/${userId}/details`,
       providesTags: ['UserDetails'],
     }),
     getUserDeeds: builder.query<PaginatedResponse<Deed>, { userId: number; page: number; take: number }>({
-      query: ({ userId, page, take }) => `${userId}/deeds?page=${page}&take=${take}`,
+      query: ({ userId, page, take }) => `users/${userId}/deeds?page=${page}&take=${take}`,
       providesTags: ['UserDeeds'],
     }),
     createDeed: builder.mutation<Deed, { userId: number; title: string; description: string; points: number }>({
       query: (body) => ({
-        url: `${body.userId}/deeds`,
+        url: `users/${body.userId}/deeds`,
         method: 'POST',
         body,
       }),
@@ -67,7 +91,7 @@ export const usersApi = createApi({
     }),
     updateDeed: builder.mutation<{ message: string }, { userId: number; deedId: number; body: UpdateDeedDto }>({
       query: ({ userId, deedId, body }) => ({
-        url: `${userId}/deeds/${deedId}`,
+        url: `users/${userId}/deeds/${deedId}`,
         method: 'PUT',
         body,
       }),
@@ -75,7 +99,7 @@ export const usersApi = createApi({
     }),
     deleteDeed: builder.mutation<Deed, { userId: number; deedId: number }>({
       query: ({ userId, deedId }) => ({
-        url: `${userId}/deeds/${deedId}`,
+        url: `users/${userId}/deeds/${deedId}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['UserDetails', 'UserDeeds'],
@@ -94,4 +118,8 @@ export const {
   useToggleFollowingMutation,
   useDeleteMeMutation,
   useUpdateMeMutation,
-} = usersApi;
+  useGetMeQuery,
+  useSignInMutation,
+  useSignOutMutation,
+  useSignUpMutation,
+} = api;

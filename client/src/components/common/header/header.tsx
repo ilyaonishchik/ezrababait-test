@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Container, Group } from '../../ui';
-import { IconHome, IconSearch, IconSettings } from '@tabler/icons-react';
+import { Avatar, Container, Group } from '../../ui';
+import { IconHome } from '@tabler/icons-react';
 import SignOutButton from './sign-out-button';
+import SettingsButton from './settings-button';
+import SearchFriendsButton from './search-friends-button';
 
 export default function Header() {
   return (
@@ -14,25 +16,13 @@ export default function Header() {
             </button>
           </Link>
           <Group>
-            <Link to='/users'>
-              <button className='btn btn-primary btn-sm'>
-                <IconSearch className='h-4  w-4' />
-                Search friends
-              </button>
-            </Link>
-            <Link to='/profile/settings'>
-              <button className='btn btn-sm'>
-                <IconSettings className='h-4 w-4' />
-                Settings
-              </button>
-            </Link>
+            <SearchFriendsButton />
+            <SettingsButton />
             <SignOutButton />
             <Link to='/profile'>
-              <div className='avatar placeholder'>
-                <div className='w-10 rounded-full bg-neutral text-neutral-content'>
-                  <span className='text-xl'>I</span>
-                </div>
-              </div>
+              <Avatar className='w-10'>
+                <span className='text-xl'>I</span>
+              </Avatar>
             </Link>
           </Group>
         </Group>

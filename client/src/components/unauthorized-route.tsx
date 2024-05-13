@@ -1,4 +1,4 @@
-import { useGetMeQuery } from '../services/auth';
+import { useGetMeQuery } from '../services/api';
 import { Loader } from './ui';
 import { Navigate } from 'react-router-dom';
 import { ChildrenProps } from '../types/props/ChildrenProps';

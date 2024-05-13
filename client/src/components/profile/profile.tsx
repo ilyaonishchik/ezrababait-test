@@ -1,4 +1,4 @@
-import { useGetMeQuery } from '../../services/auth';
+import { useGetMeQuery } from '../../services/api';
 import CreateDeed from './create-deed';
 import Container from '../ui/container';
 import UserHeader from '../common/user-header';

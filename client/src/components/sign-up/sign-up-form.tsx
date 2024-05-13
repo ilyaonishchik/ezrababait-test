@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import Alert from '../ui/alert';
 import { IconUser, IconKey, IconMail } from '@tabler/icons-react';
 import { RTKQueryError } from '../../types/RTK/RTKQueryError';
-import { useSignUpMutation } from '../../services/auth';
+import { useSignUpMutation } from '../../services/api';
 
 export default function SignUpForm() {
   const navigate = useNavigate();

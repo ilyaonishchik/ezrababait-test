@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Loader, Paper } from '../ui';
-import { useDeleteMeMutation } from '../../services/users';
+import { useDeleteMeMutation } from '../../services/api';
 
 export default function DeleteAccount() {
   const navigate = useNavigate();
