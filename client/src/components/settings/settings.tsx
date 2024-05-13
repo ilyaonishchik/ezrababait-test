@@ -1,17 +1,19 @@
-import { Container, Input, Paper, Stack } from '../ui';
+import { Container, Error, Loader } from '../ui';
+import { useGetMeQuery } from '../../services/auth';
+import DeleteAccount from './delete-account';
+import ChangeUsername from './change-username';
 
 export default function Settings() {
+  const { isLoading, error, data } = useGetMeQuery();
+
+  if (isLoading) return <Loader />;
+  if (error) return <Error error={error} />;
+  const me = data!;
+
   return (
     <Container>
-      <Paper title='Change username'>
-        <Stack>
-          <Input label='Username' />
-          <button className='btn btn-primary self-end'>Save</button>
-        </Stack>
-      </Paper>
-      <Paper title='Delete account'>
-        <button className='btn btn-error w-full'>Delete</button>
-      </Paper>
+      <ChangeUsername username={me.username} />
+      <DeleteAccount />
     </Container>
   );
 }

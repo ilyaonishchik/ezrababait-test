@@ -1,4 +1,4 @@
-import { User } from '../../types/User';
+import { User } from '../../types/entities/User';
 import { Pagination, Paper, Stack } from '../ui';
 import { PaginationProps } from '../ui/pagination';
 import UsersListItem from './users-list-item';

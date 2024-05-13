@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Alert from '../ui/alert';
 import { IconUser, IconKey } from '@tabler/icons-react';
-import { RTKQueryError } from '../../types/RTKQueryError';
+import { RTKQueryError } from '../../types/RTK/RTKQueryError';
 
 export default function SignInForm() {
   const navigate = useNavigate();

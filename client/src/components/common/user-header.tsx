@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useGetUserDetailsQuery } from '../../services/users';
 import { Loader, Paper, Stack, Error } from '../ui';
 import Points from './points';
-import { ChildrenProps } from '../../types/ChildrenProps';
+import { ChildrenProps } from '../../types/props/ChildrenProps';
 import FollowButton from './follow-button';
 
 type UserHeaderProps = {

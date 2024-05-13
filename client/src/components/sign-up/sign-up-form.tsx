@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Alert from '../ui/alert';
 import { IconUser, IconKey, IconMail } from '@tabler/icons-react';
-import { RTKQueryError } from '../../types/RTKQueryError';
+import { RTKQueryError } from '../../types/RTK/RTKQueryError';
 import { useSignUpMutation } from '../../services/auth';
 
 export default function SignUpForm() {

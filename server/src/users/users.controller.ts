@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { DecodedPayload } from 'src/auth/decorators/decoded-payload.decorator';
@@ -9,6 +9,7 @@ import { UserDetails } from './models/user-details';
 import { PaginatedResponse } from 'src/_shared/paginated.response';
 import { User } from './models/user.entity';
 import { UserFollowingStatus } from './models/user-following-status';
+import { Response } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -53,8 +54,12 @@ export class UsersController {
 
   @UseGuards(JwtGuard)
   @Delete('me')
-  async deleteMe(@DecodedPayload() { id }: JwtDecodedPayload): Promise<MessageResponse> {
+  async deleteMe(
+    @DecodedPayload() { id }: JwtDecodedPayload,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<MessageResponse> {
     await this.usersService.deleteUserById(id);
+    response.clearCookie('accessToken');
     return { message: 'Your account successfully deleted' };
   }
 

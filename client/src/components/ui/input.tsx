@@ -1,4 +1,4 @@
-import { ClassNameProps } from '../../types/ClassNameProps';
+import { ClassNameProps } from '../../types/props/ClassNameProps';
 import { createClassName } from '../../utils/createClassName';
 import Stack from './stack';
 

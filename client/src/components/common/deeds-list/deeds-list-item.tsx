@@ -1,5 +1,5 @@
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { Deed } from '../../../types/Deed';
+import { Deed } from '../../../types/entities/Deed';
 import { Group, Loader, Modal, Stack } from '../../ui';
 import Points from '../points';
 import { useDeleteDeedMutation, useUpdateDeedMutation } from '../../../services/users';

@@ -1,10 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { UserDetails } from '../types/UserDetails';
-import { PaginatedResponse } from '../types/PaginatedResponse';
-import { Deed } from '../types/Deed';
-import { UpdateDeedDto } from '../types/UpdateDeedDto';
-import { User } from '../types/User';
-import { UserFollowingStatus } from '../types/UserFollowingStatus';
+import { PaginatedResponse, UpdateDeedDto, MessageResponse, UpdateUserDto } from '../types/RTK';
+import { Deed, User, UserDetails, UserFollowingStatus } from '../types/entities';
 
 type GetUsersRequest = {
   page: number;
@@ -22,6 +18,21 @@ export const usersApi = createApi({
   }),
   tagTypes: ['Users', 'UserDetails', 'UserDeeds', 'UserFollowingStatus'],
   endpoints: (builder) => ({
+    updateMe: builder.mutation<MessageResponse, UpdateUserDto>({
+      query: (body) => ({
+        url: 'me',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Users', 'UserDetails'],
+    }),
+    deleteMe: builder.mutation<{ message: string }, void>({
+      query: () => ({
+        url: 'me',
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Users', 'UserDetails', 'UserDeeds', 'UserFollowingStatus'],
+    }),
     toggleFollowing: builder.mutation<{ message: string }, { userId: number }>({
       query: ({ userId }) => ({
         url: `${userId}/toggle-following`,
@@ -81,4 +92,6 @@ export const {
   useUpdateDeedMutation,
   useGetUserFollowingStatusQuery,
   useToggleFollowingMutation,
+  useDeleteMeMutation,
+  useUpdateMeMutation,
 } = usersApi;

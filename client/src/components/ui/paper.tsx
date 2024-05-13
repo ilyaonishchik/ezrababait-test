@@ -1,6 +1,6 @@
 import { createClassName } from '../../utils/createClassName';
-import { ChildrenProps } from '../../types/ChildrenProps';
-import { ClassNameProps } from '../../types/ClassNameProps';
+import { ChildrenProps } from '../../types/props/ChildrenProps';
+import { ClassNameProps } from '../../types/props/ClassNameProps';
 
 type PaperProps = {
   title?: string;

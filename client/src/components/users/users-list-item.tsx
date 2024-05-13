@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { User } from '../../types/User';
+import { User } from '../../types/entities/User';
 import { Group, Stack } from '../ui';
 import FollowButton from '../common/follow-button';
 

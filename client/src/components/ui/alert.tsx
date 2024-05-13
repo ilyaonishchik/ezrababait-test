@@ -1,4 +1,4 @@
-import { ChildrenProps } from '../../types/ChildrenProps';
+import { ChildrenProps } from '../../types/props/ChildrenProps';
 
 type AlertProps = {
   variant: 'warning' | 'error';

@@ -1,4 +1,4 @@
-import { ChildrenProps } from '../../types/ChildrenProps';
+import { ChildrenProps } from '../../types/props/ChildrenProps';
 import Stack from './stack';
 
 export default function Container({ children }: ChildrenProps) {

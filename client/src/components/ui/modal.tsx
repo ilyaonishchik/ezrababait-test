@@ -1,5 +1,5 @@
 import { IconX } from '@tabler/icons-react';
-import { ChildrenProps } from '../../types/ChildrenProps';
+import { ChildrenProps } from '../../types/props/ChildrenProps';
 import Group from './group';
 import Paper from './paper';
 import Stack from './stack';

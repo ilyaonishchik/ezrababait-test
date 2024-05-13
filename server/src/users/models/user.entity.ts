@@ -43,6 +43,6 @@ export class User {
   @ManyToMany(() => User, (user) => user.followings)
   followers: User[];
 
-  @OneToMany(() => Deed, (deed) => deed.user)
+  @OneToMany(() => Deed, (deed) => deed.user, { onDelete: 'CASCADE' })
   deeds: Deed[];
 }

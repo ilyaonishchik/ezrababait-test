@@ -1,4 +1,4 @@
-import { ClassNameProps } from '../../types/ClassNameProps';
+import { ClassNameProps } from '../../types/props/ClassNameProps';
 import { createClassName } from '../../utils/createClassName';
 
 export default function Loader({ className }: ClassNameProps) {

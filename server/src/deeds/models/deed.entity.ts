@@ -12,7 +12,7 @@ export class Deed {
   @UpdateDateColumn()
   updatedAt: string;
 
-  @ManyToOne(() => User, (user) => user.deeds)
+  @ManyToOne(() => User, (user) => user.deeds, { onDelete: 'CASCADE' })
   user: User;
 
   @Column()
