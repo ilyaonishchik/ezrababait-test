@@ -20,10 +20,12 @@ export default function Header() {
                 Search friends
               </button>
             </Link>
-            <button className='btn btn-sm'>
-              <IconSettings className='h-4 w-4' />
-              Settings
-            </button>
+            <Link to='/profile/settings'>
+              <button className='btn btn-sm'>
+                <IconSettings className='h-4 w-4' />
+                Settings
+              </button>
+            </Link>
             <SignOutButton />
             <Link to='/profile'>
               <div className='avatar placeholder'>

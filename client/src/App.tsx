@@ -9,36 +9,23 @@ import AuthorizedRoute from './components/authorized-route';
 import Users from './components/users/users';
 import User from './components/user/user';
 import MainLayout from './layouts/main-layout';
+import Settings from './components/settings/settings';
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
-      <Route element={<MainLayout />}>
-        <Route
-          path='/profile'
-          element={
-            <AuthorizedRoute>
-              <Profile />
-            </AuthorizedRoute>
-          }
-        />
-        <Route
-          path='/users'
-          element={
-            <AuthorizedRoute>
-              <Users />
-            </AuthorizedRoute>
-          }
-        />
-        <Route
-          path='/users/:userId'
-          element={
-            <AuthorizedRoute>
-              <User />
-            </AuthorizedRoute>
-          }
-        />
+      <Route
+        element={
+          <AuthorizedRoute>
+            <MainLayout />
+          </AuthorizedRoute>
+        }
+      >
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile/settings' element={<Settings />} />
+        <Route path='/users' element={<Users />} />
+        <Route path='/users/:userId' element={<User />} />
       </Route>
       <Route
         path='/sign-in'

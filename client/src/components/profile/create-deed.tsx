@@ -1,5 +1,5 @@
 import { IconPlus } from '@tabler/icons-react';
-import { Paper, Stack } from '../ui';
+import { Input, Paper, Stack } from '../ui';
 import { useFormik } from 'formik';
 import { useCreateDeedMutation } from '../../services/users';
 import * as Yup from 'yup';
@@ -27,35 +27,30 @@ export default function CreateDeed() {
   });
 
   return (
-    <Paper>
-      <div className='mb-5 text-xl font-bold'>Add new good deed!</div>
+    <Paper title='Add new good deed!'>
       <form onSubmit={handleSubmit}>
         <Stack className='gap-4'>
           <div className='flex items-start gap-4'>
-            <Stack className='w-3/4'>
-              <label className='font-semibold'>Title</label>
-              <input
-                type='text'
-                name='title'
-                value={values.title}
-                onChange={handleChange}
-                placeholder='Title'
-                className='input input-bordered'
-              />
-              {errors.title && touched.title && <span className='italic text-red-500'>{errors.title}</span>}
-            </Stack>
-            <Stack className='h-full items-start justify-start'>
-              <label className='font-semibold'>Points</label>
-              <input
-                type='number'
-                name='points'
-                value={values.points}
-                onChange={handleChange}
-                placeholder='Points'
-                className='input input-bordered'
-              />
-              {errors.points && touched.points && <span className='italic text-red-500'>{errors.points}</span>}
-            </Stack>
+            <Input
+              label='Title'
+              placeholder='Title'
+              className='w-3/4'
+              name='title'
+              value={values.title}
+              onChange={handleChange}
+              error={errors.title}
+              touched={touched.title}
+            />
+            <Input
+              label='Points'
+              type='number'
+              name='points'
+              value={values.points}
+              onChange={handleChange}
+              placeholder='Points'
+              error={errors.points}
+              touched={touched.points}
+            />
           </div>
           <Stack>
             <label className='font-semibold'>Description</label>

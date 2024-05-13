@@ -40,7 +40,7 @@ export default function DeedsList({ userId }: DeedsListProps) {
   const editable = userId === me.id;
 
   return (
-    <Paper>
+    <Paper title='Deeds'>
       {!editable && !isFollowing ? (
         <Group className='text-blue-700'>
           <IconExclamationCircle />
@@ -52,7 +52,6 @@ export default function DeedsList({ userId }: DeedsListProps) {
         </Group>
       ) : (
         <Stack className='gap-5'>
-          <h2 className='text-xl font-bold'>Deeds</h2>
           <div>
             {deeds.map((deed, index) => (
               <div key={deed.id}>
